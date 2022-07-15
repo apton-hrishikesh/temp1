@@ -8,7 +8,7 @@
 read n
 
 read -a arr1
-count=0
+#count=0
 s_arr1=( "${arr1[@]/*/0}" )
 
 i=0
