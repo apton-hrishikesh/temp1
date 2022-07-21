@@ -106,18 +106,15 @@ def download_images(img_urls, dest_dir):
 
   for url in img_urls:
       image_name = url.split("/")[-1]
-
       response = urllib.request.urlopen(url)
-
       image = open(image_name, "wb")
       image.write(response.read())
-
       image_tags.append('<img src="{0}">'.format(image_name))
 
   html_file = open("index.html", "w")
   html_file.write("<html><body>{0}</body></html>".format(''.join(image_tags)))
 
-  pass
+  return 0
   # +++your code here+++
  
 

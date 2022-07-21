@@ -66,7 +66,9 @@ def print_top(filename):
     # "year": 1964
     # }
     # print(sorted(thisdict,key=thisdict.get))
-    td = sorted(text_dict,key=text_dict.get)
+    print(type(text_dict))
+    td = sorted(text_dict, key=text_dict.get, reverse = True)
+    
     count =0
     for word in td:
         print(word,"\n")
