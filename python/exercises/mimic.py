@@ -29,29 +29,75 @@ def mimic_dict(filename):
     words = fi.read()
     fi.close()
     wordList = list(words.split())
-    wordList = ['']+wordList
+    wordList = ['']+wordList+['']
     mimic_d = dict.fromkeys(wordList,[])
+    mimic_d['']=[wordList[1]]
+    for i in range(1,len(wordList)):
+      try:
+          m = wordList[i]
+          n = wordList[i+1]
+          if(m in mimic_d):
+            mimic_d[m]= mimic_d[m]+[n]
+          else:
+            mimic_d[m] = n
+      except IndexError:
+        break		
+    #print(mimic_d)
+    return mimic_d	
+    #a=wordList[10]
+    #print("OUTPUT:    ",a)
+    #print(wordList,"\n")
+    #print("NEW INDEX HERE \n \n")
+    #print("KEY INTENDED:{0}".format(wordList[i]))
+    #print("DICT[KEY]={0}".format(mimic_d[wordList[i]]))
+    #print(i,"APPENDED TO KEY={0}:VALUE={1} \n\n".format(mimic_d[wordList[i]],wordList[i]))
+    #mimic_d['{0}'.format(a)]=wordList[2]
+    #print(wordList[2])
+    #mimic_d[a].append(wordList[1])
+    #print(mimic_d)
     #mimic
     # for i in range(0,len(wordList)):
     #   mimic_d[wordList[i]] = []
-    for i in range(0,len(wordList)):
-      for j in range(i,len(wordList)):
-        try:
-          mimic_d[wordList[i]].append(wordList[j+1])
-        except IndexError:
-          break
+    
+    # for i in range(0,len(wordList)):
+    #   for j in range(i,len(wordList)):
+    #     try:
+    #       mimic_d[wordList[i]].append(wordList[j+1])
+    #     except IndexError:
+    #       break
+                
+    #temp = list(mimic_d)
+    # for i in range(1,len(wordList)):
+    #   try:
+    #     if(wordList[i] in mimic_d):
+    #         mimic_d[wordList[i]].append(wordList[i+1])
+    #         #print("KEY INTENDED:{0}".format(wordList[i]))
+    #         #print("DICT[KEY]={0}".format(mimic_d[wordList[i]]))
+    #         #print(i,"APPENDED TO KEY={0}:VALUE={1} \n\n".format(mimic_d[wordList[i]],wordList[i]))
+    #     else:
+    #         mimic_d[wordList[i]] = wordList[i+1]
+    #         #print("NEW INDEX HERE \n \n")
+    #   except IndexError:
+    #     break
+    #print(mimic_d['those'])
+    #print(mimic_d['time'])
 
-    return mimic_d
+    # print(mimic_d)
+    # fp = open('output.txt','x')
+    # text = str(mimic_d)
 
 
+#global gi; gi =0
 def print_mimic(mimic_dict, word):
   """Given mimic dict and start word, prints 200 random words."""
-  for i in range(201):
-    rand_word = random.choice(mimic_dict[word])
-    print(i,".",rand_word,"\n")
+  #for gi in range(200):
+  rand_word = random.choice(mimic_dict[word])
+    #print(mimic_dict[word])
+  #print(rand_word,"\n")
+    #print_mimic(mimic_dict,rand_word)
     #fp = open("temp_mi")
   # +++your code here+++
-  return 0
+  return rand_word
 
 
 # Provided main(), calls mimic_dict() and mimic()
@@ -61,7 +107,14 @@ def main():
     sys.exit(1)
 
   dict = mimic_dict(sys.argv[1])
-  print_mimic(dict, '')
+  word_new = print_mimic(dict, '')
+  print("1 ",word_new)
+  
+  c=1
+  while(c<200):
+    word_new= print_mimic(dict,word_new)
+    print(c+1,"",word_new)
+    c+=1
 
 
 if __name__ == '__main__':
