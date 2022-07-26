@@ -64,6 +64,7 @@ import os
 import re
 import sys
 import urllib
+import urllib.request
 
 """Logpuzzle exercise
 Given an apache logfile, find the puzzle urls and download the images.
@@ -83,9 +84,9 @@ def read_urls(filename):
   fp.close()
   hostname = "http://"+filename.split('_')[1]
   links = []
-  imgs = re.findall('([-\w]+\.(?:jpg|gif|png))', text)
+  imgs = re.findall('', text)
   for x in imgs:
-    links.append(hostname+imgs)
+    links.append(hostname+'/'+x)
   return sorted(links)    
   # +++your code here+++
  
@@ -102,20 +103,21 @@ def download_images(img_urls, dest_dir):
     os.mkdir(dest_dir)
   os.chdir(dest_dir)
 
-  image_tags = []
+  images = []
 
   for url in img_urls:
       image_name = url.split("/")[-1]
       response = urllib.request.urlopen(url)
       image = open(image_name, "wb")
       image.write(response.read())
-      image_tags.append('<img src="{0}">'.format(image_name))
+      images.append('<img src="{0}">'.format(image_name))
 
-  html_file = open("index.html", "w")
-  html_file.write("<html><body>{0}</body></html>".format(''.join(image_tags)))
+  fp = open("index.html", "w")
+  fp.write("<html><body>{0}</body></html>".format(''.join(images)))
+  fp.close()
 
   return 0
-  # +++your code here+++
+  
  
 
 def main():

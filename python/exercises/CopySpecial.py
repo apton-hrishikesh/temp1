@@ -42,7 +42,7 @@ import sys
 import re
 import os
 import shutil
-import commands
+import subprocess
 
 #Copy Special exercise
 
@@ -51,7 +51,10 @@ import commands
 
 def list_dir_files(dir):
   res = []
-  files = os.listdir(dir)
+  try:
+    files = os.listdir(dir)
+  except NotADirectoryError:
+    files = os.listdir('.') 
   for x in files:
     match = re.search(r'__(\w+)__', x)
     if(match):
@@ -71,11 +74,15 @@ def copy(c_dirs, todir):
   return 0
 
 def zip(c_dirs, tozip):
-  cmd = 'zip -j '+tozip+' '.join(c_dirs)
-  stat,out = commands.getstatusoutput(cmd)
-  if(stat):
-    sys.stderr.write(out)
-    sys.exit(1)
+  cmd = 'zip -j '+tozip+' '+''.join(c_dirs)
+  print('c_dirs: ',c_dirs)
+  print('To zip:',tozip)
+  print('Command: ',cmd)
+  stat = subprocess.run(cmd)
+  try:
+    subprocess.check_output(stat)
+  except subprocess.CalledProcessError as e:
+    print(e.stderr)
   return 0
 
 def main():
@@ -89,7 +96,12 @@ def main():
     print("usage: [--todir dir][--tozip zipfile] dir [dir ...]")
     sys.exit(1)
 
-
+  c_dirs = []
+  #dirs = list_dir_files(c_dirs)
+  temp = [args[2:]]
+  for x in temp:
+    c_dirs.extend(x)
+    print(x,"\n")
   # todir and tozip are either set from command line
   # or left as the empty string.
   # The args array is left just containing the dirs.
@@ -98,20 +110,14 @@ def main():
 
   if args[0] == '--todir':
     todir = args[1]
-    del args[0:2]
+    #del args[0:2]
   elif args[0] == '--tozip':
     tozip = args[1]
-    del args[0:2]
+    #del args[0:2]
   else:
     print("error: must specify one or more dirs")
     sys.exit(1)
 
-
-  c_dirs = []
-  #dirs = list_dir_files(c_dirs)
-  for x in args:
-    c_dirs.extend(list_dir_files(x))
-    print(x,"\n")
   
   if(todir != ''):
     copy(c_dirs, todir)
