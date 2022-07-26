@@ -97,7 +97,7 @@ def main():
     sys.exit(1)
 
   c_dirs = []
-  #dirs = list_dir_files(c_dirs)
+  dirs = list_dir_files(c_dirs)
   temp = [args[2:]]
   for x in temp:
     c_dirs.extend(x)
